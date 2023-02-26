@@ -9,7 +9,7 @@ export class AuthService {
   constructor(private prisma: PrismaService) {}
   async signin(authDto: AuthDto) {
     // find the user by email
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findFirst({
       where: {
         email: authDto.email,
       },
