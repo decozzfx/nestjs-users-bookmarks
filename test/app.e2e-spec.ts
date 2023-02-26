@@ -5,6 +5,7 @@ import { AppModule } from '../src/app.module';
 import * as pactum from 'pactum';
 import { AuthDto } from 'src/auth/dto';
 import { EditUserDto } from 'src/user/dto';
+import { CreateBookmarkDto } from 'src/bookmark/dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -132,11 +133,38 @@ describe('App e2e', () => {
     });
   });
 
-  // describe('Bookmarks', () => {
-  //   describe('Create bookmarks', () => {});
-  //   describe('Get bookmarks', () => {});
-  //   describe('Get bookmark by id', () => {});
-  //   describe('Edit bookmark by id', () => {});
-  //   describe('Delete bookmark by id', () => {});
-  // });
+  describe('Bookmarks', () => {
+    describe('Get bookmarks', () => {
+      it('should get bookmarks', () => {
+        return pactum
+          .spec()
+          .get('/bookmarks')
+          .withHeaders({
+            Authorization: `Bearer $S{token}`,
+          })
+          .expectStatus(200)
+          .expectBody([]);
+      });
+    });
+    describe('Create bookmarks', () => {
+      it('should create bookmarks', () => {
+        const createBookmarkDto: CreateBookmarkDto = {
+          title: 'First Bookmark',
+          link: 'https://www.youtube.com',
+        };
+        return pactum
+          .spec()
+          .post('/bookmarks')
+          .withHeaders({
+            Authorization: `Bearer $S{token}`,
+          })
+          .withBody(createBookmarkDto)
+          .expectStatus(201)
+          .inspect();
+      });
+    });
+    describe('Get bookmark by id', () => {});
+    describe('Edit bookmark by id', () => {});
+    describe('Delete bookmark by id', () => {});
+  });
 });
